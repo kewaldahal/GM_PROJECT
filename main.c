@@ -32,8 +32,9 @@ void loadCandidates() {
   strcpy(candidates[1].party, "Party B");
   strcpy(candidates[2].party, "Party C");
   strcpy(candidates[3].party, "Party D");
-  system("clear");
 }
+
+void clearScreen() { system("clear"); }
 
 void displayCandidates() {
   printf("\n\n ### List of Candidates ###\n");
@@ -95,18 +96,33 @@ int isValidVoter(const char *voterID) {
   return 0;
 }
 
+void saveVoteDetailsToFile(const char *voterID, int candidateIndex) {
+  FILE *file = fopen("voting_details.txt", "a");
+  if (file == NULL) {
+    printf("Error opening file for writing.\n");
+    return;
+  }
+
+  fprintf(file, "%s - %s\n", candidates[candidateIndex].name, getCurrentTime());
+
+  fclose(file);
+}
+
 void castVote() {
+  clearScreen();
   char voterID[20];
   printf("\n\n ### Please enter your Voter ID to cast your vote: ");
   scanf("%s", voterID);
 
   if (isVoterAlreadyVoted(voterID)) {
     printf("\n You have already cast your vote!\n");
+    sleep(2);
     return;
   }
 
   if (!isValidVoter(voterID)) {
     printf("\n Invalid Voter ID! Vote casting failed.\n");
+    sleep(2);
     return;
   }
 
@@ -123,28 +139,37 @@ void castVote() {
     FILE *votedFile = fopen("voted.txt", "a");
     if (votedFile == NULL) {
       printf("Error opening voted ID file for writing.\n");
+      sleep(2);
       return;
     }
     fprintf(votedFile, "%s - Voted for %s (%s)\n", voterID,
             candidates[choice - 1].name, getCurrentTime());
     fclose(votedFile);
+
+    saveVoteDetailsToFile(voterID, choice - 1);
+    sleep(2);
   } else if (choice == CANDIDATE_COUNT + 1) {
     spoiledVotes++;
     printf("\n Your vote has been marked as spoiled.\n");
+    sleep(2);
   } else {
     printf("\n Error: Wrong Choice! Please retry.\n");
+    sleep(2);
   }
 }
 
 void printVotesCount() {
+  clearScreen();
   printf("\n\n ##### Voting Statistics ####\n");
   for (int i = 0; i < CANDIDATE_COUNT; i++) {
-    printf(" %s - %d\n", candidates[i].name, votesCount[i]);
+    printf(" %s - %d votes\n", candidates[i].name, votesCount[i]);
   }
   printf(" Spoiled Votes - %d\n", spoiledVotes);
+  sleep(2);
 }
 
 void getLeadingCandidate() {
+  clearScreen();
   printf("\n\n  #### Leading Candidate ####\n\n");
   int maxVotes = votesCount[0];
   int leadingCandidateIndex = 0;
@@ -161,25 +186,7 @@ void getLeadingCandidate() {
   } else {
     printf("----- Warning !!! No-win situation ----\n");
   }
-}
-
-void saveVotingDetails() {
-  FILE *file = fopen("voting_details.txt", "w");
-  if (file == NULL) {
-    printf("Error opening file for writing.\n");
-    return;
-  }
-
-  fprintf(file, "Voting Details:\n");
-  fprintf(file, "----------------\n");
-  for (int i = 0; i < CANDIDATE_COUNT; i++) {
-    fprintf(file, "%s - %d\n", candidates[i].name, votesCount[i]);
-  }
-
-  fprintf(file, "Spoiled Votes - %d\n", spoiledVotes);
-
-  fclose(file);
-  printf("Voting details saved to 'voting_details.txt'.\n");
+  sleep(2);
 }
 
 void displayLoading(int delay) {
@@ -200,6 +207,7 @@ int main() {
   loadCandidates();
 
   do {
+    clearScreen();
     printf(" *************************************\n");
     printf("*                                     *\n");
     printf("*  Welcome to Election/Voting 2023    *\n");
@@ -209,7 +217,6 @@ int main() {
     printf("\n\n 1. Cast your Vote");
     printf("\n 2. Find Vote Count");
     printf("\n 3. Find Leading Candidate");
-    printf("\n 4. Save Voting Details to File");
     printf("\n 0. Exit");
 
     printf("\n\n Please enter your choice: ");
@@ -227,10 +234,6 @@ int main() {
     case 3:
       displayLoading(200000);
       getLeadingCandidate();
-      break;
-    case 4:
-      displayLoading(300000);
-      saveVotingDetails();
       break;
     case 0:
       printf("\n Exiting the program. Goodbye!\n");
