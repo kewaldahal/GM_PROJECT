@@ -34,7 +34,7 @@ void loadCandidates() {
   strcpy(candidates[3].party, "Party D");
 }
 
-void clearScreen() { system("clear"); }
+void clearScreen() { system("cls"); }
 
 void displayCandidates() {
   printf("\n\n ### List of Candidates ###\n");
