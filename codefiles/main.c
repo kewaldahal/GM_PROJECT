@@ -1,4 +1,3 @@
-//
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -23,6 +22,7 @@ Candidate candidates[CANDIDATE_COUNT];
 int votesCount[CANDIDATE_COUNT] = {0};
 int spoiledVotes = 0;
 
+// Function to load candidate names and parties into the candidates array
 void loadCandidates() {
   strcpy(candidates[0].name, CANDIDATE1);
   strcpy(candidates[1].name, CANDIDATE2);
@@ -35,8 +35,12 @@ void loadCandidates() {
   strcpy(candidates[3].party, "Party D");
 }
 
-void clearScreen() { system("cls"); }
+// Function to clear the console screen (system-dependent)
+void clearScreen() {
+  system("cls"); // For Windows. Use "clear" for Linux/macOS.
+}
 
+// Function to display the list of candidates
 void displayCandidates() {
   printf("\n\n ### List of Candidates ###\n");
   for (int i = 0; i < CANDIDATE_COUNT; i++) {
@@ -45,12 +49,14 @@ void displayCandidates() {
   printf(" %d. None of These\n", CANDIDATE_COUNT + 1);
 }
 
+// Function to get the current time as a string
 char *getCurrentTime() {
   time_t now;
   time(&now);
   return ctime(&now);
 }
 
+// Function to check if a voter has already voted
 int isVoterAlreadyVoted(const char *voterID) {
   FILE *file = fopen("voted.txt", "r");
   if (file == NULL) {
@@ -74,6 +80,7 @@ int isVoterAlreadyVoted(const char *voterID) {
   return 0;
 }
 
+// Function to check if a voter is valid
 int isValidVoter(const char *voterID) {
   FILE *file = fopen("votingid.txt", "r");
   if (file == NULL) {
@@ -97,6 +104,7 @@ int isValidVoter(const char *voterID) {
   return 0;
 }
 
+// Function to save vote details to a file
 void saveVoteDetailsToFile(const char *voterID, int candidateIndex) {
   FILE *file = fopen("voting_details.txt", "a");
   if (file == NULL) {
@@ -109,6 +117,7 @@ void saveVoteDetailsToFile(const char *voterID, int candidateIndex) {
   fclose(file);
 }
 
+// Function for casting a vote
 void castVote() {
   clearScreen();
   char voterID[20];
@@ -159,6 +168,7 @@ void castVote() {
   }
 }
 
+// Function to print voting statistics
 void printVotesCount() {
   clearScreen();
   printf("\n\n ##### Voting Statistics ####\n");
@@ -169,6 +179,7 @@ void printVotesCount() {
   sleep(2);
 }
 
+// Function to find the leading candidate
 void getLeadingCandidate() {
   clearScreen();
   printf("\n\n  #### Leading Candidate ####\n\n");
@@ -190,6 +201,7 @@ void getLeadingCandidate() {
   sleep(2);
 }
 
+// Function to display a loading animation
 void displayLoading(int delay) {
   printf("Loading");
   fflush(stdout);
