@@ -117,6 +117,25 @@ void saveVoteDetailsToFile(const char *voterID, int candidateIndex) {
   fclose(file);
 }
 
+// Function to update vote count in the voting_details.txt file
+void updateVoteCountToFile(const char *candidateName) {
+  FILE *file = fopen("voting_details.txt", "a");
+  if (file == NULL) {
+    printf("Error opening file for writing.\n");
+    return;
+  }
+
+  for (int i = 0; i < CANDIDATE_COUNT; i++) {
+    if (strcmp(candidates[i].name, candidateName) == 0) {
+      fprintf(file, "%s - %d votes\n", candidateName, votesCount[i]);
+      break;
+    }
+  }
+
+  fclose(file);
+}
+
+
 // Function for casting a vote
 void castVote() {
   clearScreen();
@@ -157,6 +176,7 @@ void castVote() {
     fclose(votedFile);
 
     saveVoteDetailsToFile(voterID, choice - 1);
+    updateVoteCountToFile(candidates[choice - 1].name);
     sleep(2);
   } else if (choice == CANDIDATE_COUNT + 1) {
     spoiledVotes++;
@@ -168,6 +188,13 @@ void castVote() {
   }
 }
 
+// Function to pause the screen until Enter key is pressed
+void waitForEnter() {
+  printf("\nPress Enter to continue...");
+  while (getchar() != '\n');
+  getchar();  // Consume the Enter key
+}
+
 // Function to print voting statistics
 void printVotesCount() {
   clearScreen();
@@ -176,8 +203,23 @@ void printVotesCount() {
     printf(" %s - %d votes\n", candidates[i].name, votesCount[i]);
   }
   printf(" Spoiled Votes - %d\n", spoiledVotes);
-  sleep(2);
+  
+  // Display the contents of the "voting_details.txt" file
+  printf("\n\n ##### Voting Details ####\n");
+  FILE *votingDetailsFile = fopen("voting_details.txt", "r");
+  if (votingDetailsFile == NULL) {
+    printf("Error opening voting_details.txt file.\n");
+  } else {
+    char line[100];
+    while (fgets(line, sizeof(line), votingDetailsFile)) {
+      printf("%s", line);
+    }
+    fclose(votingDetailsFile);
+  }
+
+  waitForEnter();  // Wait for Enter key
 }
+
 
 // Function to find the leading candidate
 void getLeadingCandidate() {
