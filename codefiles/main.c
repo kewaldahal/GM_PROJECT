@@ -240,7 +240,7 @@ void getLeadingCandidate() {
   } else {
     printf("----- Warning !!! No-win situation ----\n");
   }
-  sleep(2);
+  waitForEnter();
 }
 
 // Function to display a loading animation
@@ -263,11 +263,11 @@ int main() {
 
   do {
     clearScreen();
-    printf(" *************************************\n");
-    printf("*                                     *\n");
-    printf("*  Welcome to Election/Voting 2023    *\n");
-    printf("*                                     *\n");
-    printf(" *************************************\n");
+    printf("                                    ***************************************\n");
+    printf("                                    *                                     *\n");
+    printf("                                    *  Welcome to Election/Voting 2023    *\n");
+    printf("                                    *                                     *\n");
+    printf("                                    ***************************************\n");
 
     printf("\n\n 1. Cast your Vote");
     printf("\n 2. Find Vote Count");
