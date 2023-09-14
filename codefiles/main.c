@@ -118,23 +118,23 @@ void saveVoteDetailsToFile(const char *voterID, int candidateIndex) {
 }
 
 // Function to update vote count in the voting_details.txt file
-void updateVoteCountToFile(const char *candidateName) {
-  FILE *file = fopen("voting_details.txt", "a");
+void updateVoteCountToFile() {
+  FILE *file = fopen("voting_details.txt", "w"); // Open in write mode to clear the file
   if (file == NULL) {
     printf("Error opening file for writing.\n");
     return;
   }
 
+  fprintf(file, "##### Voting Statistics From File ####\n");
+
   for (int i = 0; i < CANDIDATE_COUNT; i++) {
-    if (strcmp(candidates[i].name, candidateName) == 0) {
-      fprintf(file, "%s - %d votes\n", candidateName, votesCount[i]);
-      break;
-    }
+    fprintf(file, "%s - %d votes\n", candidates[i].name, votesCount[i]);
   }
+
+  fprintf(file, " Spoiled Votes - %d\n", spoiledVotes);
 
   fclose(file);
 }
-
 
 // Function for casting a vote
 void castVote() {
@@ -199,13 +199,8 @@ void waitForEnter() {
 void printVotesCount() {
   clearScreen();
   printf("\n\n ##### Voting Statistics ####\n");
-  for (int i = 0; i < CANDIDATE_COUNT; i++) {
-    printf(" %s - %d votes\n", candidates[i].name, votesCount[i]);
-  }
-  printf(" Spoiled Votes - %d\n", spoiledVotes);
-  
-  // Display the contents of the "voting_details.txt" file
-  printf("\n\n ##### Voting Details ####\n");
+
+  // Open the "voting_details.txt" file in read mode
   FILE *votingDetailsFile = fopen("voting_details.txt", "r");
   if (votingDetailsFile == NULL) {
     printf("Error opening voting_details.txt file.\n");
