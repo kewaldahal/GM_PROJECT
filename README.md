@@ -23,6 +23,7 @@ This is a simple command-line Election/Voting system implemented in C. It allows
 - `voted.txt`: A text file to record which voters have already cast their votes.
 - `voting_details.txt`: A text file used to store voting statistics.
 
+
 ## Usage
 
 1. **Compile the Code**: Compile the code using a C compiler (e.g., gcc): `gcc main.c -o voting_system`
