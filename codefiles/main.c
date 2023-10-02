@@ -125,7 +125,7 @@ void updateVoteCountToFile() {
     return;
   }
 
-  fprintf(file, "##### Voting Statistics From File ####\n");
+  fprintf(file, "\t\t\t||||********************************************************||||\t\t\t\n");
 
   for (int i = 0; i < CANDIDATE_COUNT; i++) {
     fprintf(file, "%s - %d votes\n", candidates[i].name, votesCount[i]);
@@ -198,7 +198,7 @@ void waitForEnter() {
 // Function to print voting statistics
 void printVotesCount() {
   clearScreen();
-  printf("\n\n ##### Voting Statistics ####\n");
+  printf("\n\n ##### Voting Statistics  ####\n");
 
   // Open the "voting_details.txt" file in read mode
   FILE *votingDetailsFile = fopen("voting_details.txt", "r");
